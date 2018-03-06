@@ -66,11 +66,8 @@ set(VERSION_DATATEST  "master"     CACHE STRING "branch, tag, or commit hash to 
 #put this here to override the definitions on each project's config.cmake
 option(Boost_USE_STATIC_LIBS "Use the static or the dynamic version of the Boost libraries" ${Boost_USE_STATIC_LIBS_DEFAULT_VALUE})
 
-#IMPORTANT: CHECK THE INCLUDED FILES TO UNDERSTAND THE OPTIONS! SOME OPTIONS ARE DEFINED IN MORE THAN ONE SUBPROJECT
-include(multiresolution/config.cmake)
-include(         Slic3r/config.cmake)
-include(      pyclipper/config.cmake)
-include(           cork/config.cmake)
+#IMPORTANT: CHECK THE INCLUDED FILES TO UNDERSTAND THE OPTIONS! SOME OPTIONS ARE DEFINED IN MORE THAN ONE SUBPROJECT.
+#EACH include IS PLACED AFTER THE CORRESPONDING CALL TO THE FUNCTION PROCURE_SUBPROJECT
 
 #build rules for the subprojects multiresolution and slicer
 FUNCTION(BUILD_SUBPROJECT PROJECTNAME GENERATOR BUILD_TYPE ADDITIONAL_PARAMS)
@@ -132,11 +129,14 @@ PROCURE_SUBPROJECT(${REPOSITORY_CLIPPER} ${VERSION_CLIPPER} clipper)
 
 if (BUILD_PYCLIPPER)
   PROCURE_SUBPROJECT(${REPOSITORY_PYCLIPPER} ${VERSION_PYCLIPPER} pyclipper)
+  include(pyclipper/config.cmake)
   #as pyclipper is compiled in a Python environment, no need to fiddle with generators
   add_subdirectory(pyclipper)
 endif()
 
 if (BUILD_MULTIRES)
+  PROCURE_SUBPROJECT(${REPOSITORY_MULTIRES} ${VERSION_MULTIRES} multiresolution)
+  include(multiresolution/config.cmake)
   if (GENERATE_TESTS)
     #these variables should be in multiresolution/config.cmake, but they cannot be set to adequate default values from an file that can be included at different levels, so they have to be defined twice: once here and once in multiresolution/CmakeLists.txt
     set(DATATEST_DIR "${CMAKE_CURRENT_SOURCE_DIR}/data_test" CACHE PATH "test STL files are fetched from this directory. It has to be an absolute path")
@@ -145,7 +145,6 @@ if (BUILD_MULTIRES)
     enable_testing()
     PROCURE_SUBPROJECT(${REPOSITORY_DATATEST} ${VERSION_DATATEST} data_test)
   endif()
-  PROCURE_SUBPROJECT(${REPOSITORY_MULTIRES} ${VERSION_MULTIRES} multiresolution)
   set(ADDITIONAL_PARAMS_MULTIRES
       -D COMPILE_PROGRAMOPTIONS=${COMPILE_PROGRAMOPTIONS}
       -D PYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}
@@ -185,12 +184,14 @@ endif()
 
 if (BUILD_SLIC3RTOOLS)
   PROCURE_SUBPROJECT(${REPOSITORY_SLIC3R} ${VERSION_SLIC3R} Slic3r)
+  include(Slic3r/config.cmake)
   set(ADDITIONAL_PARAMS_SLIC3RTOOLS)
   BUILD_SUBPROJECT(Slic3r GENERATOR_SLIC3RTOOLS BUILDTYPE_SLIC3RTOOLS ADDITIONAL_PARAMS_SLIC3RTOOLS)
 endif()
 
 if (BUILD_CORK)
   PROCURE_SUBPROJECT(${REPOSITORY_CORK} ${VERSION_CORK} cork)
+  include(cork/config.cmake)
   #cork requires either clang or an up-to-date GCC (5.3.0 onwards). If you do not want cork, please disable BUILD_CUSTOM_CORK
   find_program(CLANG_FOUND clang)
   find_program(CLANGXX_FOUND clang++)
