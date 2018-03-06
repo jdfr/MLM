@@ -6,7 +6,7 @@ This is the MLM (Multiresolution Layer Manufacturing) metaproject. Its purpose i
 
 ## Some examples
 
-Some examples to understand the capabilities of the MLM toolchain. The descriptions are succint; see the rest of the README for more information.
+Some examples to understand the capabilities of the MLM toolchain. The descriptions are succint; see the rest of the README for more information. The software is designed to be generic, so it can slice for many different manufacturing technologies. So far, it has been tested with stereolithography by two-photon polymerization (example 1), hybrid machining with a spindle and an ablative laser (example 3), and paste extrusion with several extrusion heads (example 4).
 
 ---
 
@@ -70,7 +70,7 @@ Results with ceramic paste:
 
 ![paste](.github/example.gcode.2.jpg)
 
-Special thanks to Ezra Feilden-Irving for taking the time and effort to execute these proofs of concept. These images are used with his permission.
+Special thanks to Eduardo Saiz for being able to use his lab's 3D printer, and to Ezra Feilden-Irving for taking the time and effort to execute these proofs of concept. These images are used with his permission.
 
 ---
 
@@ -181,7 +181,7 @@ There are other configurations, and of course other build options. By the way, s
 
 In Windows, it is possible to set up a Visual Studio solution for ease of development of the core subproject. If you do so, please remember to select as Target "x64", and use either "Release" or "Debug" as build type.
 
-## Usage overwiew (very high-level)
+## Usage overview (very high-level)
 
 The typical way to use the toolchain is:
 
@@ -190,6 +190,7 @@ The typical way to use the toolchain is:
 * Use the multislicing engine (either through the AutoCAD plugin or the main command line tool) to do the slicing. Save in the appropriate format.
 * If the results were saved in a PATHS file `result.paths` and you built the pyclipper subproject (requires python), you can use `slicesViewer.bat example 2d file result.paths` in Windows or `./slicesViewer.sh example 2d file result.paths` in Linux to inspect the results. Substitute `2d` by `3d` to see the paths in 3d (requires mayavi). If the results are in other formats (DXF or GWL), use an appropriate application to open them. In `2d` mode, you can use the cursor arrows to navigate in Z, and zoom in and out to see small details.
 * You can manipulate the resulting PATHS files with the command line utilities, if necessary.
+* Afterwards, if you are going to print with a machine that accepts gcode, you need to convert the results in the PATHS files to gcode with the custom version of Slic3r, using a command line like this one: `perl slic3r.pl [other options] --import-paths result.paths x`. Make sure to read the usage notes from `perl slic3r.pl --help`.
 
 ## Using the command-line slicing engine
 
