@@ -1,0 +1,12 @@
+#subprojects in their own repos
+clipper
+cork
+data_test
+multiresolution
+pyclipper
+Slic3r
+#directory with some custom scripts
+mk
+#build/binary directories
+bin*
+build*
