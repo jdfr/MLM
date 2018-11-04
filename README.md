@@ -1,5 +1,7 @@
 # MLM: Multiresolution Layered Manufacturing #
 
+*UPDATE*: you can read a paper about some of this work [here](MLM.pdf) or in the [journal](https://www.emeraldinsight.com/doi/abs/10.1108/RPJ-07-2017-0146).
+
 <img src="https://raw.githubusercontent.com/jdfr/MLM/master/.github/fractal-difA.jpg" width="350"> <img src="https://raw.githubusercontent.com/jdfr/MLM/master/.github/fractal-difB.jpg" width="350">
 
 This is the MLM (Multiresolution Layered Manufacturing) metaproject. Its purpose is to set up together and compile several software projects to generate the MLM toochain. This toolchain enables Multiresolution Layered Manufacturing, a new approach to hybrid manufacturing (considering both additive and subtractive processes). Conventional slicing software for 3D printers considers a single voxel size when generating the toolpaths to manufacture a 3D object. MLM can slice a 3D object considering not one but several voxel sizes and shapes, so that the bulk of the object is manufactured with big-voxel toolpaths and the high-resolution details are manufactured with small-voxel toolpaths. Of course, this means that you need either a technology able to print with several voxel sizes, or use several technologies together (commonly called *hybrid manufacturing*).
